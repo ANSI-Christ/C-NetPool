@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <error.h>
 #include <stdio.h>
+#include <pthread.h>
 
 #define NETPOOL_IMPL
 #include "NetPool.h"
