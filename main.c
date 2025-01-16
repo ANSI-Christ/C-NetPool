@@ -77,7 +77,7 @@ static void tcp_client(NetUnit * const u,const enum NET_EVENT e){
 
 static void tcp_client_delay(NetUnit * const u,const enum NET_EVENT e){
     NetAddress a[1];
-    if( e==NET_TIMEOUT && !NetUnitConnect(u,NetAddressIpX(NET_LOCAL4,12345,a)) ){
+    if( e==NET_TIMEOUT && !NetUnitConnect(u,NetAddressNumeric(NET_LOCAL4,12345,a)) ){
         u->timeout=20; /* time for connecting */
         u->handler=tcp_client;
     }
@@ -89,7 +89,7 @@ static void simple_test(void){
     NetPool *p=NetPoolCreate();
     NetUnit *u;
 
-    if( (u=NetPoolUnit(p,NET_TCP)) && !NetUnitListen(u,NetAddressIpX(NET_ANY4,12345,a)) ){
+    if( (u=NetPoolUnit(p,NET_TCP)) && !NetUnitListen(u,NetAddressNumeric(NET_ANY4,12345,a)) ){
         u->handler=tcp_server;
         u->timeout=5;
         u->data.cptr="tcp server";
@@ -187,7 +187,7 @@ static void chat_client(NetUnit * const u,const enum NET_EVENT e){
             NetUnit *server=NetPoolUnit(p,NET_TCP);
             NetUnitDisconnect(u);
             NetUnitAutoRemove(server);
-            if(NetUnitListen(server,NetAddressIpX(NET_LOCAL4,12345,a))){
+            if(NetUnitListen(server,NetAddressNumeric(NET_LOCAL4,12345,a))){
                 NetPoolEmit(p,1);
                 return;
             }
@@ -206,7 +206,7 @@ static void localhost_chat(int argc, char **argv){
     int emit;
 
     if(u){
-        NetUnitConnect(u,NetAddressIpX(NET_LOCAL4,12345,a));
+        NetUnitConnect(u,NetAddressNumeric(NET_LOCAL4,12345,a));
         u->timeout=10;
         u->handler=chat_client;
         u->data.cptr=(argc>1?argv[1]:"anonymous");
