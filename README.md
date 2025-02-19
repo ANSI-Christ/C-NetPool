@@ -8,8 +8,8 @@ Features:
 
 
 Code notes:
- - dont destroy NetPool while dispatching it, interrupt it by NetPoolEmit
- - not thread-safe, use interruptions by NetPoolEmit and external synchronization
+ - dont destroy NetPool while dispatching it, interrupt it by NetPoolAsync
+ - not thread-safe, use interruptions by NetPoolAsync and external synchronization
  - NetUnit is node in list and on event NET_CANREAD it moves after server unit (only for incoming connection)
  - always check errors by errno
 
