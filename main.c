@@ -65,7 +65,7 @@ static void tcp_client(NetUnit * const u,const enum NET_EVENT e){
             NetUnitDisconnect(u);
             break;
         case NET_DISCONNECT:
-            NetPoolEmit(NetUnitPool(u),100);
+            NetPoolAsync(NetUnitPool(u),(void*)100);
             puts("tcp client disconnect");
             break;
         case NET_ERROR:
@@ -84,7 +84,7 @@ static void tcp_client_delay(NetUnit * const u,const enum NET_EVENT e){
 }
 
 static void simple_test(void){
-    int emit;
+    void *async;
     NetAddress a[1];
     NetPool *p=NetPoolCreate();
     NetUnit *u;
@@ -103,8 +103,8 @@ static void simple_test(void){
     NetUnitAutoRemove(u);
 
 _mark:
-    switch(NetPoolDispatch(p,&emit)){
-        case 0: printf("emit:%d\n",emit); break;
+    switch(NetPoolDispatch(p,&async)){
+        case 0: printf("async:%p\n",async); break;
         case EINVAL: break;
         default: goto _mark;
     }
@@ -127,7 +127,7 @@ void *inputer(NetUnit *u){
             if(!strcmp(s+n,"/exit")){
                 l=sprintf(s,"<%s leave chat>",u->data.cptr)+1;
                 NetUnitWrite(u,s,l,0);
-                NetPoolEmit(NetUnitPool(u),2);
+                NetPoolAsync(NetUnitPool(u),(void*)2);
                 break;
             }
             l=strlen(s)+1;
@@ -188,7 +188,7 @@ static void chat_client(NetUnit * const u,const enum NET_EVENT e){
             NetUnitDisconnect(u);
             NetUnitAutoRemove(server);
             if(NetUnitListen(server,NetAddressNumeric(NET_LOCAL4,12345,a))){
-                NetPoolEmit(p,1);
+                NetPoolAsync(p,(void*)1);
                 return;
             }
             server->handler=chat_server;
@@ -203,7 +203,7 @@ static void localhost_chat(int argc, char **argv){
     NetAddress a[1];
     NetPool *p=NetPoolCreate();
     NetUnit *u=NetPoolUnit(p,NET_TCP);
-    int emit;
+    void *async;
 
     if(u){
         NetUnitConnect(u,NetAddressNumeric(NET_LOCAL4,12345,a));
@@ -213,8 +213,8 @@ static void localhost_chat(int argc, char **argv){
     }
 
 _mark:
-    switch(NetPoolDispatch(p,&emit)){
-        case 0: printf("emit:%d\n",emit); break;
+    switch(NetPoolDispatch(p,&async)){
+        case 0: printf("async:%p\n",async); break;
         case EINVAL: break;
         default: goto _mark;
     }
