@@ -124,7 +124,7 @@ enum NET_ENDIAN NetEndian(void);
 
 
 
-#define NetEndian() ((const union{unsigned char _; enum NET_ENDIAN e;}){1}).e
+#define NetEndian() ((const union{unsigned char _; unsigned int e;}){1}).e
 #define NetViewHost(_p_) NetViewNet(_p_)
 #define NetViewNet(_p_) do{\
     struct static_assert_bad_type_##__LINE__{char _1[(sizeof((_p_)[0]<=16) && sizeof((_p_)[0])>1) ? 1 : -1], _2[sizeof((_p_)[0]+=0.1)];};\
