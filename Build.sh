@@ -1,10 +1,2 @@
-
-clear
-make -f ./makefile clean
-clear
-echo '>> compile <<'
-echo ' '
-
-make -f ./makefile
-make -f ./makefile rmo > /dev/null
-
+rm ./test
+gcc -O3 ./main.c -o ./test -lpthread
